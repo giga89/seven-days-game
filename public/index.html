@@ -10,8 +10,14 @@
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="game-container"></div>
-    <div id="ui-container" class="hidden">
+    <div id="game-wrapper" style="width: 100vw; height: 100vh; overflow: hidden; position: relative; background: #000;">
+        <div id="game-container" style="width: 100%; height: 100%;">
+            <!-- Phaser Canvas Goes Here -->
+        </div>
+        <div id="in-game-characters-overlay" class="hidden" style="position: absolute; width: 800px; height: 600px; pointer-events: none; display: flex; align-items: flex-end; justify-content: center; z-index: 10; transform-origin: top left;"></div>
+    </div>
+    
+    <div id="ui-container" class="hidden" style="max-width: 800px; margin: 0 auto; width: 100%; position: absolute; top: 0; left: 0; right: 0; background: #222; min-height: 100vh; z-index: 20;">
         <!-- Character Creator UI -->
         <div id="character-creator" class="ui-panel">
             <h1>Crea la tua Vita</h1>
@@ -24,23 +30,89 @@
                         <option value="female">Donna</option>
                     </select>
                 </div>
-                <div class="form-group">
-                    <label>Sesso Compagno/a:</label>
-                    <select id="partner-gender">
-                        <option value="male">Uomo</option>
-                        <option value="female">Donna</option>
-                    </select>
+                <div style="margin-bottom: 15px; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 5px;">
+                    <h3>Personalizza Te Stesso</h3>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;">
+                        <div>
+                            <label for="player-skin">Colore Pelle:</label>
+                            <input type="color" id="player-skin" value="#f1c27d">
+                        </div>
+                        <div>
+                            <label for="player-hair">Colore Capelli:</label>
+                            <input type="color" id="player-hair" value="#222222">
+                        </div>
+                        <div>
+                            <label for="player-hair-style">Taglio Capelli:</label>
+                            <select id="player-hair-style">
+                                <option value="Corti">Corti e Ordinati</option>
+                                <option value="Spettinati">Spettinati/Ricci</option>
+                                <option value="Lunghi">Lunghi</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="player-clothing">Indumento:</label>
+                            <select id="player-clothing">
+                                <option value="Camice da Laboratorio">Camice da Laboratorio</option>
+                                <option value="Felpa Scura">Felpa Scura</option>
+                                <option value="Giacca Elegante">Giacca Elegante</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Figli:</label>
-                    <select id="children-type">
-                        <option value="biological">Biologici (1)</option>
-                        <option value="adopted">Adottati (1)</option>
-                        <option value="none">Nessuno</option>
-                    </select>
+
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <label for="partner-gender">Partner:</label>
+                        <select id="partner-gender">
+                            <option value="female">Femmina</option>
+                            <option value="male">Maschio</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label for="children-type">Figli:</label>
+                        <select id="children-type">
+                            <option value="biological">Biologico</option>
+                            <option value="adopted">Adottato</option>
+                            <option value="none">Nessuno</option>
+                        </select>
+                    </div>
                 </div>
                 <button type="button" id="start-btn" class="btn">Inizia</button>
             </form>
+            <div id="family-preview-container">
+                <h2>Anteprima Famiglia</h2>
+                <div id="family-preview" style="display: flex; gap: 10px; flex-wrap: wrap;"></div>
+                <button type="button" id="reroll-btn" class="btn secondary" style="width: 100%; margin-top: 10px;">🎲 Rilancia Tratti Somatici</button>
+            </div>
+        </div>
+        <div id="intro-screen" class="ui-panel hidden">
+            <h1 id="intro-title">Il Tuo Mondo</h1>
+            <div id="intro-text-container" style="text-align: left; font-size: 12px; line-height: 1.8; margin-bottom: 20px; min-height: 180px;">
+                <p id="intro-step-1">Il mondo come lo conosciamo sta finendo. L'Anomalia, un collasso quantistico che tu stesso hai scoperto, ha iniziato a divorare la struttura della realtà. I notiziari parlano di mesi. I tuoi calcoli privati dicono la verità: mancano solo 7 giorni.</p>
+                <p id="intro-step-2" class="hidden">Ti sei rinchiuso in laboratorio. Sei l'unico che può decifrare l'equazione della Salvezza. Ogni ora passata a dormire o a riposare equivale a milioni di vite condannate. Il peso dell'intera umanità ti sta schiacciando.</p>
+                <p id="intro-step-3" class="hidden" style="color: #ffaaaa;"></p>
+                <div id="intro-family-preview" class="hidden" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 10px; margin-bottom: 20px;"></div>
+                <p id="intro-step-4" class="hidden" style="color: #ff5555; font-weight: bold;">Hai solo 7 giorni. 168 ore.<br><br>Salverai l'umanità chiudendoti nel bunker, condannando chi ami a morire sentendosi abbandonato?<br><br>O sceglierai di tenerli per mano mentre il cielo brucia?</p>
+            </div>
+            <button type="button" id="next-intro-btn" class="btn">Continua...</button>
+            <button type="button" id="start-day-1-btn" class="btn hidden" style="background-color: #880000; border-color: #ff0000;">Affronta il Destino</button>
+        </div>
+
+        <div id="ending-screen" class="ui-panel hidden">
+            <h1 id="ending-title">Fine</h1>
+            <div id="ending-image-container" style="margin-bottom: 20px;">
+                <img id="ending-image" src="" alt="Finale" style="max-width: 100%; border: 2px solid #fff; border-radius: 8px; display: none;">
+            </div>
+            <p id="ending-desc" style="font-size: 12px; line-height: 1.8; margin-bottom: 30px;"></p>
+            <button type="button" id="reset-run-btn" class="btn">Rigioca (Debug)</button>
+        </div>
+
+        <div id="event-modal" class="ui-panel hidden" style="border-color: #ffaa00;">
+            <h1 style="color: #ffaa00;">IMPREVISTO NOTTURNO</h1>
+            <img id="event-image" src="" alt="Evento" style="width: 100%; max-width: 400px; border-radius: 8px; margin-bottom: 15px; border: 2px solid #555; display: none;">
+            <p id="event-desc" style="font-size: 12px; line-height: 1.8; margin-bottom: 30px;"></p>
+            <div id="event-actions" style="display: flex; flex-direction: column; gap: 15px; align-items: center;">
+            </div>
         </div>
         
         <div id="block-screen" class="ui-panel hidden">
@@ -50,6 +122,7 @@
         </div>
     </div>
     
+    <script src="js/character-creator.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>
