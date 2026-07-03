@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7 Giorni alla Fine</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Phaser CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="game-container"></div>
+    <div id="ui-container" class="hidden">
+        <!-- Character Creator UI -->
+        <div id="character-creator" class="ui-panel">
+            <h1>Crea la tua Vita</h1>
+            <p>Seleziona i dettagli del tuo protagonista.</p>
+            <form id="char-form">
+                <div class="form-group">
+                    <label>Sesso Protagonista:</label>
+                    <select id="player-gender">
+                        <option value="male">Uomo</option>
+                        <option value="female">Donna</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Sesso Compagno/a:</label>
+                    <select id="partner-gender">
+                        <option value="male">Uomo</option>
+                        <option value="female">Donna</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Figli:</label>
+                    <select id="children-type">
+                        <option value="biological">Biologici (1)</option>
+                        <option value="adopted">Adottati (1)</option>
+                        <option value="none">Nessuno</option>
+                    </select>
+                </div>
+                <button type="button" id="start-btn" class="btn">Inizia</button>
+            </form>
+        </div>
+        
+        <div id="block-screen" class="ui-panel hidden">
+            <h1>Fine della Corsa</h1>
+            <p>Hai già vissuto questi 7 giorni. Non puoi tornare indietro.</p>
+        </div>
+    </div>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>
