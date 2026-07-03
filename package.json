@@ -1,0 +1,13 @@
+{
+  "name": "seven-days-game",
+  "version": "1.0.0",
+  "description": "7 Days to the End game",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.6"
+  }
+}
